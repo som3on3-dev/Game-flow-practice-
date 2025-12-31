@@ -1,0 +1,82 @@
+function out = ScoreManager(action, value)
+
+persistent score;
+persistent highscore;
+persistent wrongnotes;
+persistent missednotes;
+
+%% SAVEING SCORES:
+
+% if there is not any 2nd value, put 0.
+if isempty(score)
+    score = 0;
+end
+
+
+if isempty(highscore)
+    if exist('highscore.mat')
+        load('highscore.mat', 'highscore');
+    else 
+        highscore = 0;
+    end
+end
+
+
+if isempty(wrongnotes)
+    wrongnotes = 0;
+end
+
+
+if isempty(missednotes)
+    missednotes = 0;
+end
+
+
+switch action
+   
+    case 'reset'
+        score = 0;
+        wrongnotes = 0;
+        missednotes = 0;
+        out = score;
+
+    case 'add'
+        if nargin < 2
+            value = 1;
+        end
+        score = score + value;
+        out = score;
+
+    case 'add_wrong'
+        wrongnotes = wrongnotes + 1;
+        out = wrongnotes;
+
+    case 'add_missed'
+        missednotes = missednotes + 1;
+        out = missednotes;
+    
+    case 'get'
+        out = score;
+   
+    case 'get_highscore'
+        out = highscore;
+
+    case 'save_highscore'
+        if score > highscore
+            highscore = score;
+            save('highscore.mat', 'highscore');
+        end
+        out = highscore;
+
+    case 'get_wrong'
+        out = wrongnotes;
+    
+    case 'get_missed'
+        out = missednotes;
+    
+    otherwise 
+        error('unknown action. use reset, add, get, get_highscore, or save_highscore');
+   
+end
+
+end
